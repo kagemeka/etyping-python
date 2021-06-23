@@ -1,3 +1,4 @@
+ARG PYVER=3.9
 FROM python:3.9-alpine
 SHELL ["ash", "-c"]
 ARG GECKO_VER=0.29.0
