@@ -39,18 +39,26 @@ def main():
     value=id_,
   ).click()
   id_ = 'start_btn'
-  time.sleep(2)
+  time.sleep(1)
   driver.switch_to_frame(
     'typing_content',
   )
 
-  with open('tmp.html', 'w') as f:
-    f.write(driver.page_source)
   driver.find_element(
     by=By.ID,
     value=id_,
   ).click()
   # driver.close()
+  # with open('tmp.html', 'w') as f:
+  #   f.write(driver.page_source)
+
+
+  driver.find_element(
+    by=By.TAG_NAME,
+    value='body',
+  ).send_keys(Keys.SPACE)
+  
+
 
 
 if __name__ == '__main__':
