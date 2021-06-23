@@ -1,0 +1,8 @@
+#!/bin/bash
+
+docker build \
+  --build-arg PYVER=$PYVER \
+  --build-arg GECKO_VER=$GECKO_VER \
+  -f Dockerfile \
+  -t $IMAGE_NAME \
+  ..
