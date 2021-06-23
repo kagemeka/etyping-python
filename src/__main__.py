@@ -53,10 +53,21 @@ def main():
   #   f.write(driver.page_source)
 
 
-  driver.find_element(
+  game = driver.find_element(
     by=By.TAG_NAME,
     value='body',
-  ).send_keys(Keys.SPACE)
+  )
+  game.send_keys(Keys.SPACE)
+
+  time.sleep(1 << 2)
+  for i in range(15):
+    txt = driver.find_element(
+      by=By.ID,
+      value='sentenceText',
+    ).text
+    game.send_keys(txt)
+    print(txt)
+    time.sleep(1.5)
   
 
 
