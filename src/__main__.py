@@ -60,12 +60,14 @@ def main():
   game.send_keys(Keys.SPACE)
 
   time.sleep(1 << 2)
-  txt = driver.find_element(
-    by=By.ID,
-    value='sentenceText',
-  ).text
-  game.send_keys(txt)
-  print(txt)
+  for i in range(15):
+    txt = driver.find_element(
+      by=By.ID,
+      value='sentenceText',
+    ).text
+    game.send_keys(txt)
+    print(txt)
+    time.sleep(1.5)
   
 
 
