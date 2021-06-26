@@ -12,7 +12,7 @@ services:
       - common.env
     image: kagemeka/etypiing-py
     network_mode: host
-    restart: on-failure
+    restart: always
     tty: true
     volumes:
       - type: bind
@@ -26,4 +26,8 @@ services:
         target: /root/$PROJECT
         read_only: false
     working_dir: /root/$PROJECT
+    command: [
+      /usr/local/bin/python,
+      ./src/__main__.py,
+    ]
 

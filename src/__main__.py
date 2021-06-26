@@ -1,6 +1,7 @@
 import selenium 
 from selenium.webdriver import(
   Firefox,
+  FirefoxOptions,
 )
 from \
   selenium.webdriver \
@@ -67,6 +68,8 @@ class PlayWithLogin():
     self.__start_up_game()
     self.__start_game()
     self.__play()
+    time.sleep(1)
+    self.__driver.close()
     
   
 
@@ -80,7 +83,11 @@ class PlayWithLogin():
   def __init_driver(
     self,
   ):
-    self.__driver = Firefox()
+    opts = FirefoxOptions()
+    opts.set_headless()
+    self.__driver = Firefox(
+      firefox_options=opts,
+    )
 
 
   def __login(
@@ -138,7 +145,7 @@ class PlayWithLogin():
       by=By.ID,
       value='start_btn',
     ).click()
-    time.sleep(1)
+    time.sleep(1 << 1)
     game = driver.find_element(
       by=By.TAG_NAME,
       value='body',
@@ -151,9 +158,12 @@ class PlayWithLogin():
   def __play(
     self,
   ):
-    for i in range(15):
-      self.__input()
-      time.sleep(2)
+    while 1:
+      try:
+        self.__input()
+        time.sleep(2)
+      except:
+        break
     self.__register()
 
 
