@@ -1,2 +1,2 @@
-selenium==3.131.0
+selenium==3.141.0
 PyYAML==5.4.1
