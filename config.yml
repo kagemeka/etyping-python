@@ -1,7 +1,5 @@
-language
+base_url: https://www.e-typing.ne.jp
+interval: 2.5
+headless: false
+category: roma # roma | english
 
-register 
-
-headless
-
-what kind

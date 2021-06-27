@@ -1,18 +1,27 @@
 version: '3.9'
 
 
+
+secrets:
+  auth:
+    file: $ROOT/auth.json
+    name: auth
+
+
 services:
   py:
     build:
       context: .. 
       dockerfile:
         docker/Dockerfile
-    # command: []
     env_file: 
       - common.env
     image: kagemeka/etypiing-py
     network_mode: host
     restart: always
+    secrets:
+      - source: auth
+        target: auth
     tty: true
     volumes:
       - type: bind
@@ -30,4 +39,6 @@ services:
       /usr/local/bin/python,
       ./src/__main__.py,
     ]
+
+
 
