@@ -17,6 +17,18 @@ import (
   Keys,
 )
 import time
+import re
+import enum 
+import typing
+
+
+
+class CategoryID(
+  enum.IntEnum,
+):
+  ROMA: int = enum.auto()
+  KANA: int = enum.auto()
+  ENGLISH: int = enum.auto()
 
 
 
@@ -24,8 +36,6 @@ import dataclasses
 @dataclasses.dataclass
 class ETypingCfg():
   base_url: str
-
-
 
 
 
@@ -37,9 +47,77 @@ class AuthCfg():
 
 
 @dataclasses.dataclass
+class PlayCfg():
+  interval: float
+
+
+class Play():
+
+  def __call__(
+    self,
+    game: (
+      selenium
+      .webdriver
+      .remote
+      .webelement
+      .WebElement
+    ),
+  ):
+    self.__game = game
+    t = self.__cfg.interval 
+    while 1:
+      try:
+        self.__read_text()
+        self.__input()
+        time.sleep(t)
+      except:
+        break
+  
+
+  def __init__(
+    self,
+    cfg: PlayCfg,
+  ):
+    self.__cfg = cfg
+
+
+  def __input(
+    self,
+  ):
+    self.__game.send_keys(
+      self.__txt,
+    )
+
+
+  def __read_text(
+    self,
+  ):
+    game = self.__game
+    html = game.find_element(
+      by=By.ID,
+      value='sentenceText',
+    ).find_elements(
+      by=By.TAG_NAME,
+      value='span',
+    )[1].get_attribute(
+      'outerHTML',
+    )
+    self.__txt = re.sub(
+      r'<[^>]+>',
+      '',
+      html,
+    ).replace('␣', ' ')
+
+
+
+
+
+
+@dataclasses.dataclass
 class PlayWithLoginCfg():
   base_url: str
   auth: AuthCfg
+  play: PlayCfg
 
 
 
@@ -58,35 +136,48 @@ class LoginFormID():
 
 
 
+@dataclasses.dataclass
+class RegisterFormID():
+  register: str = 'regist_btn'
+  publish: str = 'yesBtn'
+  confirm: str = 'okBtn'
+
+
+
+
+
 class PlayWithLogin():
   def __call__(
     self,
   ):
     self.__init_driver()
-    self.__open_website()
+    self.__open_page()
     self.__login()
     self.__start_up_game()
     self.__start_game()
-    self.__play()
+    self.__play(self.__game)
+    self.__register()
     time.sleep(1)
     self.__driver.close()
-    
-  
+      
 
   def __init__(
     self,
     cfg: PlayWithLoginCfg,
   ):
-    self.__cfg = cfg 
+    self.__cfg = cfg
+    self.__play = Play(
+      cfg.play,
+    )
   
 
   def __init_driver(
     self,
   ):
     opts = FirefoxOptions()
-    opts.set_headless()
+    opts.headless = True
     self.__driver = Firefox(
-      firefox_options=opts,
+      # options=opts,
     )
 
 
@@ -111,12 +202,16 @@ class PlayWithLogin():
 
 
 
-  def __open_website(
+  def __open_page(
     self,
   ):
     self.__driver.get(
       self.__cfg.base_url,
     )
+    url = (
+      f'{self.__cfg.base_url}/member/cht.asp?tp=2'
+    )
+    self.__driver.get(url)
 
 
   def __start_up_game(
@@ -155,71 +250,25 @@ class PlayWithLogin():
     self.__game = game
 
 
-  def __play(
-    self,
-  ):
-    while 1:
-      try:
-        self.__input()
-        time.sleep(2)
-      except:
-        break
-    self.__register()
-
-
-  def __input(
-    self,
-  ):
-    game = self.__game
-    s = game.find_element(
-      by=By.ID,
-      value='sentenceText',
-    ).text
-    game.send_keys(s)
-    print(s)
-
-  
   def __register(
     self,
-  ):
+  ) -> typing.NoReturn:
+    ids = RegisterFormID()
     game = self.__game
     game.find_element(
       by=By.ID,
-      value='regist_btn',
+      value=ids.register,
     ).click()
     time.sleep(1)
     game.find_element(
       by=By.ID,
-      value='yesBtn',
+      value=ids.publish,
     ).click()
     time.sleep(1)
     game.find_element(
       by=By.ID,
-      value='okBtn',
+      value=ids.confirm,
     ).click()
-    # if not ok_btn:
-    #   return
-    # ok_btn.click()
-    
-
-
-
-  
-  
-
-
-def login(driver):
-  ... 
-  
-  email = 'kagemeka1@gmail.com'
-  passwd = 'ruruth12'
-  
-
-
-
-def normalize():
-  import string
-  print(string.ascii_letters)
 
 
 def main():
@@ -233,50 +282,18 @@ def main():
     email=email,
     passwd=passwd,
   )
+  play = PlayCfg(
+    interval=3,
+  )
   cfg = PlayWithLoginCfg(
     base_url=base_url,
     auth=auth,
+    play=play,
   )
   play = PlayWithLogin(cfg)
   play()
   
   
-  # url = (
-  #   f'{base_url}/member/cht.asp?tp=2'
-  # )
-  # driver.get(url)
-
-  # id_ = 'level_check_btn'
-  # driver.find_element(
-  #   by=By.ID,
-  #   value=id_,
-  # ).click()
-  # driver.find_element(
-  #   by=By.ID,
-  #   value=id_,
-  # ).click()
-
-
-  # for i in range(15):
-  #   # while True:
-  #   #   txt = driver.find_element(
-  #   #     by=By.ID,
-  #   #     value='sentenceText',
-  #   #   ).find_elements(
-  #   #     by=By.TAG_NAME,
-  #   #     value='span',
-  #   #   )
-  #   #   print(txt)
-  #   #   if not txt:
-  #   #     break
-  #   #   txt = txt[1].text
-  #   #   txt = txt[:10]
-  #   #   txt = txt.replace(
-  #   #     '␣', ' ',
-  #   #   )
-  #   #   game.send_keys(txt)
-
-
 
 if __name__ == '__main__':
   main()
