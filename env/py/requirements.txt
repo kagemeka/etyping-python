@@ -1,2 +1,1 @@
-selenium==3.141.0
-PyYAML==5.4.1
+kagemeka[etyping]==0.1.16
