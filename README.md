@@ -9,7 +9,13 @@ The RPA tool for e-typing with Python
 
 
 # configuration 
-- it's needed to fill `auth.json` to authentificate.
+- it's needed to create `auth.json` under root directory to login.
+```json
+{
+  "email": "<your email>",
+  "passwd": "<password>"
+}
+```
 - optionally, you can edit config.yml for the program.
 
 
