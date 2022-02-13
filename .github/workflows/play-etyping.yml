@@ -35,5 +35,15 @@ jobs:
           PASSWORD: ${{ secrets.PASSWORD }}
         run: |
           source $HOME/.poetry/env
-          etyping run --email $EMAIL --password $PASSWORD --headless --game-type roma
-          etyping run --email $EMAIL --password $PASSWORD --headless --game-type english
+          poetry run etyping run \
+            --email $EMAIL \
+            --password $PASSWORD \
+            --headless \
+            --game-type \
+            roma
+          poetry run etyping run \
+            --email $EMAIL \
+            --password $PASSWORD \
+            --headless \
+            --game-type \
+            english
