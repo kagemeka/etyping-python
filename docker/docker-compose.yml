@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  py:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - internal.env
+    image: kagemeka/$PROJECT_NAME:$PROJECT_VERSION
+    init: true
+    network_mode: host
+    restart: on-failure
+    stdin_open: true
+    tty: true
+    volumes:
+      - type: bind
+        bind:
+          propagation: rprivate
+        source: /tmp/.X11-unix
+        target: /tmp/.X11-unix
+        read_only: false
+        volume:
+          nocopy: true
+      - type: bind
+        source: $PROJECT_ROOT
+        target: /root/$PROJECT_NAME
+    working_dir: /root/$PROJECT_NAME
