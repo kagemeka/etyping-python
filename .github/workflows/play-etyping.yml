@@ -1,0 +1,39 @@
+name: Play etyping
+
+on:
+  schedule:
+    - cron: "0 21 * * *"
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+jobs:
+  play:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10"]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install poetry
+        run: |
+          curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+      - name: Install dependencies
+        run: |
+          source $HOME/.poetry/env
+          poetry install
+      - name: play etyping.
+        env:
+          EMAIL: ${{ secrets.EMAIL }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+        run: |
+          source $HOME/.poetry/env
+          etyping run --email $EMAIL --password $PASSWORD --headless --game-type roma
+          etyping run --email $EMAIL --password $PASSWORD --headless --game-type english
