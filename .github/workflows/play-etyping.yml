@@ -2,7 +2,7 @@ name: Play etyping
 
 on:
   schedule:
-    - cron: "0 21 * * *"
+    - cron: "30 */6 * * *"
   push:
     branches:
       - dev
